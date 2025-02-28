@@ -91,13 +91,15 @@ total_disk_cap_GB = bytes_to_gb(total_disk_cap)
 
 diag = DiagnosticsService(lockdown=lockdown)
 battery = diag.get_battery()
+
 battery_SOH = (battery["NominalChargeCapacity"] / battery["DesignCapacity"]) * 100
 
 iDevice = Idevice()
 iDevice.m_Name = find_device_name(m_Names_mapping, device_info["ProductType"])
 iDevice.m_Number = device_info["ModelNumber"]
 iDevice.imei = device_info["InternationalMobileEquipmentIdentity"]
-iDevice.color = color_mapping[device_info["DeviceColor"]]
+#____________should be "DeviceEnclosureColor" and "DeviceColor"___________ needs to be fixed for iOS >= 17
+#iDevice.color = color_mapping[device_info["DeviceColor"]]
 iDevice.disk_cap = f"{total_disk_cap_GB}GB"
 iDevice.battery_SOH = f"{round(battery_SOH)}%"
 
@@ -126,8 +128,7 @@ border = {"left": 10, "top": 10, "right": 460, "bottom": 310}
 
 def print_data_3(iDevice, border):
     pdc.TextOut(border.get("left"), border.get("top"), f"{iDevice.m_Name}")
-    #len(iDevice.m_Number)
-    pdc.TextOut(border.get("left"), (border.get("top") + 35 * 1), f"{iDevice.color}")
+    #pdc.TextOut(border.get("left"), (border.get("top") + 35 * 1), f"{iDevice.color}")
     pdc.TextOut(border.get("left"), (border.get("top") + 35 * 2), f"{iDevice.disk_cap}")
     pdc.TextOut((border.get("left") + (len(iDevice.disk_cap) * 30)), (border.get("top") + 35 * 2), f"{iDevice.battery_SOH}")
     pdc.TextOut(border.get("left"), (border.get("bottom") - 30), f"{iDevice.imei}")
